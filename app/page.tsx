@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-interface Totdo {
+interface Todos {
   id: string;
   text: string;
 }
@@ -18,20 +18,16 @@ export default function Home() {
   return (
     <main>
       <ul>
-        {todos.map((t) => 
+        {todos.map((t) => (
+          <li key={t.id}>
+            <span>{t.text}</span>
 
-        <li key={t.id}>
-          <span>{t.text}</span>
-          <div>
-
-          <button 
-          onClick={() => setTodos(todos.filter(({ id }) => id !== t.id))}
-          >
-            Delete
-          </button>
-          </div>
+            <button
+              onClick={() => setTodos(todos.filter(({ id }) => id !== t.id))}>
+              🗑️
+            </button>
           </li>
-
+        ))}
       </ul>
     </main>
   );
