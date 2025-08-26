@@ -10,7 +10,7 @@ describe('todo', () => {
     cy.get('ul').find('li').its('length').should('be.gt', 0); // kollar om li finns i ul
   });
   it('should be able to delete a todo', () => {
-    cy.contains('Feed the cat').find('button').click();
+    cy.contains('Feed the cat').parents('li').find('button').click();
     cy.get('li').should('have.length', 2);
     cy.contains('Feed the cat').should('not.exist');
   });

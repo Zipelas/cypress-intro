@@ -18,24 +18,16 @@ export default function Home() {
   return (
     <main>
       <ul>
-        {todos.map((t) => (
-          <li key={t.id}>
-            {t.text}
-            <button onClick={() => setTodos(todos.filter((todo) => todo.id !== t.id))}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-    </main>
-  );
-}
+        {todos.map((t) => 
 
-// "use client";
-        </li>
-        <li>Walk all the cats
-          <button>Delete</button>
-        </li>
+        <li key={t.id}>
+          <span>{t.text}</span>
+          <div>
+
+          <button onClick={(setTodos(todos.filter({ id } =>)))}
+          </div>
+          </li>
+
       </ul>
     </main>
   );
