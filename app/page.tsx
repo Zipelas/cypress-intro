@@ -7,7 +7,7 @@ interface Totdo {
   text: string;
 }
 
-const mockedTodos: Todo[] = [
+const mockedTodos: Todos[] = [
   { id: '1', text: 'Feed the cat' },
   { id: '2', text: 'Ignore the dogs' },
   { id: '3', text: 'Walk all the cats' },
@@ -24,7 +24,11 @@ export default function Home() {
           <span>{t.text}</span>
           <div>
 
-          <button onClick={(setTodos(todos.filter({ id } =>)))}
+          <button 
+          onClick={() => setTodos(todos.filter(({ id }) => id !== t.id))}
+          >
+            Delete
+          </button>
           </div>
           </li>
 
