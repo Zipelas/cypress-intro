@@ -34,3 +34,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# NextJS + Cypress boilerplate
+
+## Kom igång
+
+1. Lägg till atlas url till din databas i `.env` filen
+2. Kör `npm install` för att installera dependencies
+3. Publicera databasen med `npm run push`
+4. Seeda sedan databasen med `npm run seed`
+5. Starta utvecklingsservern med `npm run dev`
+6. Öppna en ny terminal och kör `npm test`
+
+Nu borde du vara reda att skriva nya tester och bygga ut din app.
