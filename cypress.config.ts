@@ -2,14 +2,15 @@ import { spawn } from 'child_process';
 import { defineConfig } from 'cypress';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import waitOn from 'wait-on';
+import { db } from './prisma/db';
 import { seedTodos } from './prisma/seed/todo';
 
 export default defineConfig({
   e2e: {
-    async setupNodeEvents(on, config) {
+    async setupNodeEvents(on) {
       // 1. Skapa en in-memory databas (replica set för att Prisma gnäller annars)
-      const db = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
-      const dbUri = db.getUri('cypress-test');
+      const mongo = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
+      const dbUri = mongo.getUri('cypress-test');
 
       // 2. Start Next.JS servern (på en annan port som ansluter till 1.)
       const server = spawn(
@@ -30,7 +31,7 @@ export default defineConfig({
       // 4. Städa upp processerna dvs Mongo databasen och Next.JS server
       const cleanUp = async () => {
         server.kill();
-        await db.stop();
+        await mongo.stop();
       };
       process.on('exit', cleanUp);
 
