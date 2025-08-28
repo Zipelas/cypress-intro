@@ -23,9 +23,17 @@ export default defineConfig({
           stdio: 'inherit',
         }
       );
+
       // 3. Vänta på att Next.JS servern är igång innan Cypress kör vidare.
       await waitOn({ resources: [`http://localhost:3100`], timeout: 60_000 });
+
       // 4. Städa upp processerna dvs Mongo databasen och Next.JS server
+      const cleanUp = async () => {
+        server.kill();
+        await db.stop();
+      };
+      process.on('exit', cleanUp);
+
       // 5. Reseeda om databasen så att testerna blir oberoende av varandra
 
       on('task', {
