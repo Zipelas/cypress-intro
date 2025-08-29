@@ -9,8 +9,8 @@ export default async function Home() {
   const todos = await db.todo.findMany();
 
   return (
-    <main className='bg-black text-slate-50'>
-      <h1 className='text-6xl text-sky'>My Todo List</h1>
+    <main className='bg-black text-sky-600 p-4'>
+      <h1 className='text-6xl text-sky'>🚶‍♂️‍➡️Walk Tracker</h1>
       <Datepicker />
       <Input />
       <Link href='/statistics'>
