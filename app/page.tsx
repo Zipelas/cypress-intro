@@ -1,7 +1,9 @@
 import { db } from '@/prisma/db';
-import Datepicker from './ui/datepicker';
-import TodoList from './ui/todo-list';
+import Link from 'next/link';
 import Button from './ui/button';
+import Datepicker from './ui/datepicker';
+import Input from './ui/input';
+import TodoList from './ui/todo-list';
 
 export default async function Home() {
   const todos = await db.todo.findMany();
@@ -10,7 +12,10 @@ export default async function Home() {
     <main className='bg-black text-slate-50'>
       <h1 className='text-6xl text-sky'>My Todo List</h1>
       <Datepicker />
-      <Button />
+      <Input />
+      <Link href='/statistics'>
+        <Button>Statistics</Button>
+      </Link>
       <TodoList defaultTodos={todos} />
     </main>
   );
