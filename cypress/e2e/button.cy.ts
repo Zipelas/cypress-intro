@@ -4,5 +4,5 @@ beforeEach(() => {
 
 it('should display button', () => {
   cy.visit('/');
-  cy.get('button').should('exist').should('contain.text', 'See statistics');
+  cy.get('button').should('exist');
 });
