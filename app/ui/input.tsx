@@ -9,7 +9,7 @@ export default function Input() {
     <input
       type='text'
       placeholder='Enter how much you have walked'
-      className='border-2 border-sky-600 rounded-4xl p-2 text-slate-50 bg-black'
+      className='text-sky-600 text-2xl border-4 border-sky-600 rounded-4xl p-2'
     />
   );
 }
