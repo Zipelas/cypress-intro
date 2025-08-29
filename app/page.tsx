@@ -1,12 +1,16 @@
 import { db } from '@/prisma/db';
+import Datepicker from './ui/datepicker';
 import TodoList from './ui/todo-list';
+import Button from './ui/button';
 
 export default async function Home() {
   const todos = await db.todo.findMany();
 
   return (
     <main className='bg-black text-slate-50'>
-      <h1 className='text-6xl'>My Todo List</h1>
+      <h1 className='text-6xl text-sky'>My Todo List</h1>
+      <Datepicker />
+
       <TodoList defaultTodos={todos} />
     </main>
   );
