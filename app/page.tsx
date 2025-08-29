@@ -10,7 +10,7 @@ export default async function Home() {
     <main className='bg-black text-slate-50'>
       <h1 className='text-6xl text-sky'>My Todo List</h1>
       <Datepicker />
-
+      <Button />
       <TodoList defaultTodos={todos} />
     </main>
   );
