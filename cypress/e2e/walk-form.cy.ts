@@ -1,4 +1,4 @@
-const setDate = (value: `${number}-${number}-${number}`) => {
+const setDate = (value: string) => {
   cy.get('[data-cy="date-input"]').then(($el) => {
     const input = $el[0] as HTMLInputElement;
     const proto = Object.getOwnPropertyDescriptor(
@@ -17,6 +17,7 @@ describe('Walk form', () => {
     cy.visit('/'); // update if your form lives on another route
   });
 
+  // ---------- DatePicker basic ----------
   it('should display the datepicker', () => {
     cy.get('[data-cy="datepicker"]').should('exist').and('be.visible');
     cy.get('[data-cy="date-input"]')
@@ -30,6 +31,7 @@ describe('Walk form', () => {
     cy.get('[data-cy="date-input"]').should('have.value', value);
   });
 
+  // ---------- Month switch ----------
   it('should change month when selecting a date from a different month', () => {
     setDate('2025-01-15');
     cy.get('[data-cy="date-input"]')
@@ -48,6 +50,7 @@ describe('Walk form', () => {
       });
   });
 
+  // ---------- Year switch ----------
   it('should change year when selecting a date from a different year', () => {
     setDate('2024-09-15');
     cy.get('[data-cy="date-input"]')
@@ -66,6 +69,7 @@ describe('Walk form', () => {
       });
   });
 
+  // ---------- Leap year edge cases ----------
   it('should accept leap day on a leap year', () => {
     setDate('2024-02-29');
     cy.get('[data-cy="date-input"]').should('have.value', '2024-02-29');
@@ -77,29 +81,109 @@ describe('Walk form', () => {
       .invoke('val')
       .then((v) => {
         const value = String(v);
-        expect(value).to.not.eq('2025-02-29');
-        // Often becomes '' in Chrome; we only assert that the invalid date isn't accepted.
+        expect(value).to.not.eq('2025-02-29'); // often becomes ''
       });
   });
 
+  // ---------- InputField presence ----------
   it('should show the text input', () => {
     cy.get('[data-cy="input"]').should('exist').and('be.visible');
   });
 
-  // 🆕 InputField tester
+  // ---------- InputField typing ----------
   it('should allow typing into the InputField', () => {
-    const text = '3000 steps';
-    // Din wrapper har data-cy="input", själva input-elementet är inuti
-    cy.get('[data-cy="input"] input')
+    const text = '3000';
+    cy.get('[data-cy="walk-amount-input"]')
       .should('have.attr', 'placeholder', 'Enter how much you have walked')
       .type(text)
       .should('have.value', text);
   });
 
   it('should allow clearing the InputField', () => {
-    cy.get('[data-cy="input"] input')
+    cy.get('[data-cy="walk-amount-input"]')
       .type('some text')
       .clear()
       .should('have.value', '');
+  });
+
+  // ---------- Zod validation (requires InputField with Zod + error rendering) ----------
+  it('should show a validation error for empty input on blur', () => {
+    // säkerställ att fältet är tomt och fokuserat
+    cy.get('[data-cy="walk-amount-input"]').should('have.value', '').click();
+
+    // blur genom att klicka utanför
+    cy.get('body').click('topLeft');
+
+    // först: aria-invalid
+    cy.get('[data-cy="walk-amount-input"]').should(
+      'have.attr',
+      'aria-invalid',
+      'true'
+    );
+
+    // sen: felmeddelandet
+    cy.get('[data-cy="input-error"]')
+      .should('be.visible')
+      .and('contain.text', 'Value is required');
+  });
+
+  it('should show a validation error for non-numeric input', () => {
+    cy.get('[data-cy="walk-amount-input"]').type('abc');
+    cy.get('body').click('topLeft');
+
+    cy.get('[data-cy="walk-amount-input"]').should(
+      'have.attr',
+      'aria-invalid',
+      'true'
+    );
+
+    cy.get('[data-cy="input-error"]')
+      .should('be.visible')
+      .and('contain.text', 'Please enter a whole number');
+  });
+
+  it('should show a validation error for zero or negative numbers', () => {
+    cy.get('[data-cy="walk-amount-input"]').type('0');
+    cy.get('body').click('topLeft');
+
+    cy.get('[data-cy="walk-amount-input"]').should(
+      'have.attr',
+      'aria-invalid',
+      'true'
+    );
+
+    cy.get('[data-cy="input-error"]')
+      .should('be.visible')
+      .and('contain.text', 'Must be greater than 0');
+
+    cy.get('[data-cy="walk-amount-input"]').clear().type('-5');
+    cy.get('body').click('topLeft');
+
+    cy.get('[data-cy="walk-amount-input"]').should(
+      'have.attr',
+      'aria-invalid',
+      'true'
+    );
+
+    cy.get('[data-cy="input-error"]')
+      .should('be.visible')
+      .and('contain.text', 'Please enter a whole number');
+  });
+
+  it('should clear the validation error when input becomes valid', () => {
+    cy.get('[data-cy="walk-amount-input"]').type('abc');
+    cy.get('body').click('topLeft');
+
+    cy.get('[data-cy="input-error"]').should('be.visible');
+
+    cy.get('[data-cy="walk-amount-input"]').clear().type('3000');
+    cy.get('body').click('topLeft');
+
+    cy.get('[data-cy="walk-amount-input"]').should(
+      'have.attr',
+      'aria-invalid',
+      'false'
+    );
+    cy.get('[data-cy="input-error"]').should('not.exist');
   });
 });
