@@ -12,7 +12,11 @@
     "generate": "prisma generate",
     "push": "prisma db push",
     "studio": "prisma studio",
-    "seed": "prisma db seed"
+    "seed": "prisma db seed",
+    "dev:test": "cross-env NODE_ENV=test PORT=3100 next dev -p 3100",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "start-server-and-test \"npm run dev:test\" http://localhost:3100 \"cypress run\""
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
