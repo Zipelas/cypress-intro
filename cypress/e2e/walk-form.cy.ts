@@ -28,5 +28,7 @@ describe('Walk form', () => {
     cy.get('[data-cy="date-input"]').should('have.value', value);
   });
 
-
+  it('should show the text input', () => {
+    cy.get('[data-cy="input"]').should('exist').and('be.visible');
+  });
 });
