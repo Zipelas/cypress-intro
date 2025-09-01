@@ -1,9 +1,8 @@
 import { db } from '@/prisma/db';
 import Link from 'next/link';
 import Button from './ui/button';
-import Datepicker from './ui/datepicker';
-import Input from './ui/input';
 import TodoList from './ui/todo-list';
+import WalkForm from './ui/walk-form';
 
 export default async function Home() {
   const todos = await db.todo.findMany();
@@ -11,8 +10,7 @@ export default async function Home() {
   return (
     <main className='bg-black text-sky-600 p-4'>
       <h1 className='text-6xl text-sky'>🚶‍♂️‍➡️Walk Tracker</h1>
-      <Datepicker />
-      <Input />
+      <WalkForm />
       <Link href='/statistics'>
         <Button>Statistics</Button>
       </Link>
