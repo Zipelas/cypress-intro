@@ -18,7 +18,7 @@ export default function SaveButton({
   type = 'button',
 }: SaveButtonProps) {
   return (
-    <div className='text-sky-600 text-2xl border-4 border-sky-600 rounded-4xl p-2 m-2'>
+    <div className='text-sky-600 text-2xl p-2 m-2'>
       <Button
         data-cy='save-button'
         type={type}
