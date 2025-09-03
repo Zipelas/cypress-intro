@@ -13,5 +13,15 @@ describe('StatsForm', () => {
 
   it('should display dropdown', () => {
     cy.get('[data-cy="dropdown"]').should('exist').and('be.visible');
+    cy.get('[data-cy="dropdown"] option')
+      .not('[value=""]')
+      .then(($opts) => {
+        const texts = [...$opts].map((o) => o.textContent!.trim());
+        expect(texts).to.deep.equal([
+          'Gått i snitt',
+          'Gått varje månad',
+          'Gått totalt per år',
+        ]);
+      });
   });
 });
