@@ -4,7 +4,7 @@ beforeEach(() => {
 });
 describe('StatsForm', () => {
   it('should display infoCard', () => {
-    cy.get('div').should('exist');
+    cy.get('[data-cy="infocard"]').should('exist');
   });
 
   it('should display Button', () => {
