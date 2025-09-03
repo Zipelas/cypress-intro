@@ -1,10 +1,9 @@
 beforeEach(() => {
   cy.task('reseed');
-  cy.visit('/');
+  cy.visit('/statistics');
 });
 describe('StatsForm', () => {
   it('should display infoCard', () => {
-    cy.visit('/');
     cy.get('div').should('exist');
   });
 
@@ -13,6 +12,6 @@ describe('StatsForm', () => {
   });
 
   it('should display dropdown', () => {
-    cy.get('select').should('exist');
+    cy.get('[data-cy="dropdown"]').should('exist').and('be.visible');
   });
 });
