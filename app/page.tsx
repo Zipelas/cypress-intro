@@ -9,7 +9,7 @@ export default async function Home() {
 
   return (
     <main className='bg-black text-sky-600 p-4'>
-      <h1 className='text-6xl text-sky'>🚶‍♂️‍➡️Walk Tracker - Save your walks</h1>
+      <h1 className='text-6xl text-sky'>🚶‍♂️‍➡️Walk Tracker - Walk this way 🎶</h1>
       <WalkForm />
       <Link href='/statistics'>
         <Button>Statistics</Button>
