@@ -1,24 +1,24 @@
 'use client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { z } from 'zod';
 
-const walkAmountSchema = z
+const schema = z
   .string()
   .trim()
   .min(1, 'Value is required')
-  .refine((v) => /^[0-9]+$/.test(v), 'Please enter a whole number')
+  .regex(/^[0-9]+$/, 'Please enter a whole number')
   .refine((v) => Number(v) > 0, 'Must be greater than 0');
 
 export default function InputField() {
   const [value, setValue] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [touched, setTouched] = useState(false);
 
-  const validate = (val: string) => {
-    const res = walkAmountSchema.safeParse(val);
-    setError(
-      res.success ? null : res.error.issues[0]?.message ?? 'Invalid value'
-    );
-  };
+  const error = useMemo(() => {
+    if (!touched) return null; // visa först efter blur
+    if (value.trim() === '') return 'Value is required';
+    const r = schema.safeParse(value);
+    return r.success ? null : r.error.issues[0]?.message ?? 'Invalid value';
+  }, [value, touched]);
 
   return (
     <div
@@ -29,19 +29,14 @@ export default function InputField() {
         type='text'
         placeholder='Enter how much you have walked'
         value={value}
-        onChange={(e) => {
-          setValue(e.target.value);
-
-          if (error) validate(e.target.value);
-        }}
-        onBlur={() => validate(value)}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={() => setTouched(true)}
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby='walk-amount-error'
         className={`text-sky-600 text-2xl border-4 rounded-4xl p-2 ${
           error ? 'border-red-500' : 'border-sky-600'
         }`}
       />
-
       {error && (
         <p
           id='walk-amount-error'
