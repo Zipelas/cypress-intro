@@ -1,10 +1,16 @@
 import StatsForm from '../ui/stats-form';
+import WalkForm from '../ui/walk-form';
 
-export default async function Statistics() {
+export default function Statistics() {
   return (
-    <>
-      <h1 className='text-6xl text-sky-600'>Statistics</h1>
-      <StatsForm />
-    </>
+    <main>
+      <h2 className='text-6xl text-sky'>
+        🚶‍♂️‍➡️Walk Tracker - Walk this way 🎶
+      </h2>
+      <div className='text-6xl text-sky-600 p-6 grid md:grid-cols-2 gap-6'>
+        <WalkForm />
+        <StatsForm />
+      </div>
+    </main>
   );
 }
