@@ -1,21 +1,35 @@
 'use client';
 
 type InfoCardProps = {
-  choice: string; // t.ex. "avg" | "monthly" | "yearly"
-  label: string; // human readable text
+  choice: '' | 'avg' | 'monthly' | 'yearly';
+  avgPerWalk: number;
+  totalThisMonth: number;
+  totalThisYear: number;
+  count: number;
 };
 
-export default function InfoCard({ choice, label }: InfoCardProps) {
+export default function InfoCard({
+  choice,
+  avgPerWalk,
+  totalThisMonth,
+  totalThisYear,
+  count,
+}: InfoCardProps) {
+  const content =
+    choice === 'avg'
+      ? `Går i snitt ${avgPerWalk.toFixed(1)} per tillfälle (${count} loggar).`
+      : choice === 'monthly'
+      ? `Totalt denna månad: ${totalThisMonth}.`
+      : choice === 'yearly'
+      ? `Totalt i år: ${totalThisYear}.`
+      : 'Välj ett alternativ i dropdownen.';
+
   return (
     <div
       data-cy='infocard'
-      className=' text-sky-600 text-2xl border-4 border-sky-600 rounded-xl p-4 m-2'>
-      <h3 className='text-xl font-semibold'>Valt filter</h3>
-      {choice ? (
-        <p className='mt-2'>{label}</p>
-      ) : (
-        <p className='mt-2 italic text-gray-500'>Välj något i dropdownen</p>
-      )}
+      className='rounded-xl border p-4'>
+      <h3 className='text-xl font-semibold'>Statistik</h3>
+      <p className='mt-2'>{content}</p>
     </div>
   );
 }
