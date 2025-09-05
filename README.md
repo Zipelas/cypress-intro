@@ -1,4 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Testning - Uppgift 2.
+
+## Beskrivning
+
+Det här projektet är byggt med Next.JS, Cypress, MongoDB, Prisma och Tailwind. Jag har skapat komponenter där du kan välja datum, fylla i ett input-fält, en dropdown, en kort där statistik visas och knappar.
+
+Jag skrev ett par användarflöden om användarna Tom & Jerry:
+
+1a-gångsanvändaren
+Tom går in på sidan. Han väljer vilket datum han vill använda. Sen fyller han i ett inputfält hur många steg han har gått för dagen och så sparar han det. När han skriver in "tusen" så får han ett felmeddelande. Han fyller sedan i med siffror (1000). Sen stänger han ner sidan.
+
+Återgångsanvändare
+Jerry gör samma sak som Tom + plus att han går in klickar på knappen statistik. Där kan han välja på olika statistik (Gått i snitt, Gått varje månad och Gått totalt per år) som han vill se. Sen så stänger han ner sidan.
+
+
+## Installation
+
+Kör `npm install` för att installera alla paket.
+
+## Utveckling
+
+Kör `npm run dev` för att starta utvecklingsservern.
+
+## Testning
+
+Kör `npm test` för att köra testerna.
+
+
+
+
+<!-- This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
@@ -46,4 +76,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 5. Starta utvecklingsservern med `npm run dev`
 6. Öppna en ny terminal och kör `npm test`
 
-Nu borde du vara reda att skriva nya tester och bygga ut din app.
+Nu borde du vara reda att skriva nya tester och bygga ut din app. -->
