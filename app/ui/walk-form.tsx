@@ -11,6 +11,7 @@ export default function WalkForm() {
   const [saving, setSaving] = useState(false);
 
   const canSave = date.length > 0 && /^\d+$/.test(amount) && Number(amount) > 0;
+  console.log({ date, amount, canSave });
 
   const onSave = async () => {
     if (!canSave) return;

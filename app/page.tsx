@@ -1,10 +1,9 @@
 import { db } from '@/prisma/db';
 import StatsForm from './ui/stats-form';
-import TodoList from './ui/todo-list';
 import WalkForm from './ui/walk-form';
 
 export default async function Home() {
-  const todos = await db.todo.findMany();
+  const walks = await db.walk.findMany();
 
   return (
     <main className='bg-black text-sky-600'>
@@ -15,7 +14,6 @@ export default async function Home() {
         <WalkForm />
         <StatsForm />
       </div>
-      <TodoList defaultTodos={todos} />
     </main>
   );
 }

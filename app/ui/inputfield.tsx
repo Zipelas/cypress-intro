@@ -9,8 +9,12 @@ const schema = z
   .regex(/^[0-9]+$/, 'Please enter a whole number')
   .refine((v) => Number(v) > 0, 'Must be greater than 0');
 
-export default function InputField() {
-  const [value, setValue] = useState('');
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export default function InputField({ value, onChange }: Props) {
   const [touched, setTouched] = useState(false);
 
   const error = useMemo(() => {
@@ -29,7 +33,7 @@ export default function InputField() {
         type='text'
         placeholder='Enter how much you have walked'
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         onBlur={() => setTouched(true)}
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby='walk-amount-error'

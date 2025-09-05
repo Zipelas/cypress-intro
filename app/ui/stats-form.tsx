@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { loadWalks } from '../statistics/walkStore';
 import Dropdown from './dropdown';
-import InfoCard from './infocard';
+import InfoCard from './infocard'
 
 export default function StatsForm() {
   const [choice, setChoice] = useState<'' | 'avg' | 'monthly' | 'yearly'>('');
@@ -12,9 +12,9 @@ export default function StatsForm() {
   useEffect(() => {
     const refresh = () => setWalks(loadWalks());
     refresh();
-    // lyssna på våra egna saves
+
     window.addEventListener('walks-updated', refresh);
-    // lyssna på förändringar från andra tabs
+
     window.addEventListener('storage', refresh);
     return () => {
       window.removeEventListener('walks-updated', refresh);
@@ -53,7 +53,7 @@ export default function StatsForm() {
 
       <Dropdown
         value={choice}
-        onChange={(v) => setChoice(v as '' | 'avg' | 'monthly' | 'yearly')}>
+        onChange={(v) => setChoice(v as any)}>
         <option value=''>Välj ett alternativ</option>
         <option value='avg'>Gått i snitt</option>
         <option value='monthly'>Gått varje månad</option>
@@ -68,10 +68,5 @@ export default function StatsForm() {
         count={count}
       />
     </div>
-    // <Button>↩ Back</Button>
-    // <div className=' text-sky-600 text-2xl border-4 border-sky-600 rounded-4xl p-2 m-2'>
-    //   TEST
-    //   {/* {props.children} */}
-    // </div>
   );
 }
