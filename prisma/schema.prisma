@@ -18,4 +18,5 @@ model Walk {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   date DateTime
   amount Int
+  text String
 }
