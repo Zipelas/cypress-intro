@@ -1,20 +1,27 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { loadWalks } from '../statistics/walkStore';
+import { getWalks } from '../api/walks/actions';
 import Dropdown from './dropdown';
-import InfoCard from './infocard'
+import InfoCard from './infocard';
 
 export default function StatsForm() {
   const [choice, setChoice] = useState<'' | 'avg' | 'monthly' | 'yearly'>('');
-  const [walks, setWalks] = useState(() => loadWalks());
+  const [walks, setWalks] = useState<{ id: string; date: string; amount: number; text: string; }[]>([]);
 
   useEffect(() => {
-    const refresh = () => setWalks(loadWalks());
+    const refresh = async () => {
+      const data = await getWalks();
+      setWalks(
+        data.map(walk => ({
+          ...walk,
+          date: typeof walk.date === 'string' ? walk.date : walk.date.toISOString().slice(0, 10),
+        }))
+      );
+    };
     refresh();
 
     window.addEventListener('walks-updated', refresh);
-
     window.addEventListener('storage', refresh);
     return () => {
       window.removeEventListener('walks-updated', refresh);
