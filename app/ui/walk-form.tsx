@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { saveWalk } from '../statistics/walkStore';
+import { saveWalk } from '../api/walks/actions';
 import DatePicker from './datepicker';
 import InputField from './inputfield';
 import SaveButton from './savebutton';
@@ -17,7 +17,7 @@ export default function WalkForm() {
     if (!canSave) return;
     setSaving(true);
     try {
-      saveWalk({ date, amount: Number(amount) });
+      saveWalk({ date, amount: Number(amount), text: '' });
       // nollställ
       setDate('');
       setAmount('');
