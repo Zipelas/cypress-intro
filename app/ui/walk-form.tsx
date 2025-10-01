@@ -4,6 +4,7 @@ import { saveWalk } from '../api/walks/actions';
 import DatePicker from './datepicker';
 import InputField from './inputfield';
 import SaveButton from './savebutton';
+import User from './user';
 
 export default function WalkForm() {
   const [date, setDate] = useState(''); // YYYY-MM-DD
@@ -17,7 +18,7 @@ export default function WalkForm() {
     if (!canSave) return;
     setSaving(true);
     try {
-      saveWalk({ date, amount: Number(amount), text: '' });
+      await saveWalk({ date, amount: Number(amount), text: '' });
       // nollställ
       setDate('');
       setAmount('');
@@ -37,6 +38,7 @@ export default function WalkForm() {
         value={amount}
         onChange={setAmount}
       />
+      <User />
       <SaveButton
         onClick={onSave}
         loading={saving}
