@@ -1,10 +1,7 @@
-import { db } from '@/prisma/db';
 import StatsForm from './ui/stats-form';
 import WalkForm from './ui/walk-form';
 
 export default async function Home() {
-  const walks = await db.walk.findMany();
-
   return (
     <main className='bg-black text-sky-600'>
       <h1 className='text-6xl text-sky p-4'>
