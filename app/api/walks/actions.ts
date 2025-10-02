@@ -18,6 +18,13 @@ export async function saveWalk(data: {
   revalidatePath('/');
 }
 
+export async function deleteWalk(id: string) {
+  await db.walk.delete({
+    where: { id },
+  });
+  revalidatePath('/');
+}
+
 export async function getWalks() {
   return await db.walk.findMany({});
 }
