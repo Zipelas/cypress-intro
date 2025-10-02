@@ -1,3 +1,5 @@
+"use client"
+
 interface UserProps {
   value: string;
   onChange: (value: string) => void;
