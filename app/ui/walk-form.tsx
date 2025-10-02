@@ -10,6 +10,7 @@ export default function WalkForm() {
   const [date, setDate] = useState(''); // YYYY-MM-DD
   const [amount, setAmount] = useState(''); // string -> valideras i InputField
   const [saving, setSaving] = useState(false);
+  const [user, setUser] = useState('');
 
   const canSave = date.length > 0 && /^\d+$/.test(amount) && Number(amount) > 0;
   console.log({ date, amount, canSave });
@@ -18,10 +19,13 @@ export default function WalkForm() {
     if (!canSave) return;
     setSaving(true);
     try {
-      await saveWalk({ date, amount: Number(amount), text: '' });
+      await saveWalk({ date, amount: Number(amount), text: user });
       // nollställ
       setDate('');
       setAmount('');
+      setUser('');
+      // Trigger refresh of stats form
+      window.dispatchEvent(new CustomEvent('walks-updated')); //Function to update UI instantly
     } finally {
       setSaving(false);
     }
@@ -38,7 +42,10 @@ export default function WalkForm() {
         value={amount}
         onChange={setAmount}
       />
-      <User />
+      <User
+        value={user}
+        onChange={setUser}
+      />
       <SaveButton
         onClick={onSave}
         loading={saving}
