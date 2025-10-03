@@ -128,7 +128,7 @@ export default function StatsForm() {
           Klicka på en användare för att se deras statistik
         </p>
       )}
-      <ul className='flex flex-row gap-4 flex-wrap justify-center mt-6'>
+      <ul className='flex flex-row gap-4 flex-wrap justify-center mt-6 text-xl'>
         {uniqueUsers.map((user) => {
           // Check if this user is selected (any of their walks is selected)
           const selectedUserWalks = walks.filter((w) => w.text === user.name);
