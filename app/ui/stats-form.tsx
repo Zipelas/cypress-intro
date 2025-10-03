@@ -137,7 +137,9 @@ export default function StatsForm() {
           );
 
           return (
-            <li key={user.name} className='flex items-center gap-2'>
+            <li
+              key={user.name}
+              className='flex items-center gap-2'>
               <button
                 onClick={() => setSelectedWalkId(user.sampleWalkId)}
                 className={`p-2 rounded border ${
