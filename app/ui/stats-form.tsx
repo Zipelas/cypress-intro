@@ -128,7 +128,7 @@ export default function StatsForm() {
           Klicka på en användare för att se deras statistik
         </p>
       )}
-      <div className='flex flex-row gap-4 flex-wrap justify-center mt-6'>
+      <ul className='flex flex-row gap-4 flex-wrap justify-center mt-6'>
         {uniqueUsers.map((user) => {
           // Check if this user is selected (any of their walks is selected)
           const selectedUserWalks = walks.filter((w) => w.text === user.name);
@@ -137,9 +137,7 @@ export default function StatsForm() {
           );
 
           return (
-            <div
-              key={user.name}
-              className='flex items-center gap-2'>
+            <li key={user.name} className='flex items-center gap-2'>
               <button
                 onClick={() => setSelectedWalkId(user.sampleWalkId)}
                 className={`p-2 rounded border ${
@@ -157,10 +155,10 @@ export default function StatsForm() {
                 title={`Ta bort alla ${user.name}s promenader`}>
                 ❌
               </button>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
 
       <Dropdown
         value={choice}
