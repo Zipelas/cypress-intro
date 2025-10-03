@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { deleteWalk, getWalks } from '../api/walks/actions';
+import { walks as walkCategories } from '../data';
 import Dropdown from './dropdown';
 import InfoCard from './infocard';
 
@@ -99,23 +100,17 @@ export default function StatsForm() {
     };
   }, [walks, selectedWalkId]);
 
-  // Function to get unique users (no duplicates)
+  // Function to get unique users mapped to predefined categories
   const getUniqueUsers = () => {
-    const uniqueUsers = [];
-    const seenNames = new Set();
-
-    for (const walk of walks) {
-      if (!seenNames.has(walk.text) && walk.text.trim() !== '') {
-        seenNames.add(walk.text);
-        uniqueUsers.push({
-          name: walk.text,
-          // Use the first walk with this name for the ID (for selection tracking)
-          sampleWalkId: walk.id,
-        });
-      }
-    }
-
-    return uniqueUsers;
+    return walkCategories.map((categoryName) => {
+      const categoryWalks = walks.filter((w) => w.text === categoryName);
+      return {
+        name: categoryName,
+        // Use the first walk with this name for the ID (for selection tracking)
+        sampleWalkId: categoryWalks.length > 0 ? categoryWalks[0].id : null,
+        count: categoryWalks.length,
+      };
+    });
   };
 
   const uniqueUsers = getUniqueUsers();
@@ -141,22 +136,27 @@ export default function StatsForm() {
               key={user.name}
               className='flex items-center gap-2'>
               <button
-                onClick={() => setSelectedWalkId(user.sampleWalkId)}
+                onClick={() => user.sampleWalkId && setSelectedWalkId(user.sampleWalkId)}
+                disabled={!user.sampleWalkId}
                 className={`p-2 rounded border ${
                   isUserSelected
                     ? 'bg-sky-600 text-white border-sky-600'
-                    : 'bg-white text-sky-600 border-sky-600 hover:bg-sky-50'
+                    : user.sampleWalkId
+                    ? 'bg-white text-sky-600 border-sky-600 hover:bg-sky-50'
+                    : 'bg-gray-200 text-gray-400 border-gray-400 cursor-not-allowed'
                 }`}>
                 {user.name} ({selectedUserWalks.length})
               </button>
-              <button
-                onClick={() => {
-                  // Delete all walks for this user
-                  selectedUserWalks.forEach((walk) => handleDelete(walk.id));
-                }}
-                title={`Ta bort alla ${user.name}s promenader`}>
-                ❌
-              </button>
+              {selectedUserWalks.length > 0 && (
+                <button
+                  onClick={() => {
+                    // Delete all walks for this user
+                    selectedUserWalks.forEach((walk) => handleDelete(walk.id));
+                  }}
+                  title={`Ta bort alla ${user.name}s promenader`}>
+                  ❌
+                </button>
+              )}
             </div>
           );
         })}
