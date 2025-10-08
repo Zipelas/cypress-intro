@@ -128,7 +128,7 @@ export default function StatsForm() {
           Klicka på en användare för att se deras statistik
         </p>
       )}
-      <ul className='flex flex-row gap-4 flex-wrap justify-center mt-6 text-xl'>
+      <ul className='flex flex-row gap-4 flex-wrap justify-center mt-6 text-xl' data-cy="user-list">
         {uniqueUsers.map((user) => {
           // Check if this user is selected (any of their walks is selected)
           const selectedUserWalks = walks.filter((w) => w.text === user.name);
@@ -137,10 +137,10 @@ export default function StatsForm() {
           );
 
           return (
-            <li
+            <li data-cy="user-item"
               key={user.name}
               className='flex items-center gap-2'>
-              <button
+              <button data-cy="user-select"
                 onClick={() => setSelectedWalkId(user.sampleWalkId)}
                 className={`p-2 rounded border ${
                   isUserSelected
@@ -149,7 +149,7 @@ export default function StatsForm() {
                 }`}>
                 {user.name} ({selectedUserWalks.length})
               </button>
-              <button
+              <button data-cy="user-delete"
                 onClick={() => {
                   // Delete all walks for this user
                   selectedUserWalks.forEach((walk) => handleDelete(walk.id));
