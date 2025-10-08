@@ -31,14 +31,12 @@ describe('WalkForm, StatsForm, Combined', () => {
   });
 
   it('renders user list, shows stats via dropdown, and deletes a user', () => {
-    // List exists and has items
     cy.get('[data-cy="user-list"]')
       .should('exist')
       .find('li')
       .as('items')
       .should('have.length.greaterThan', 0);
 
-    // Buttons usable on first item
     cy.get('@items')
       .first()
       .within(() => {
@@ -46,10 +44,8 @@ describe('WalkForm, StatsForm, Combined', () => {
         cy.get('[data-cy="user-delete"]').should('exist');
       });
 
-    // Dropdown disabled before selection
     cy.get('[data-cy="dropdown"]').should('be.disabled');
 
-    // Select first user -> dropdown enabled
     cy.get('[data-cy="user-select"]').first().click();
     cy.get('[data-cy="dropdown"]')
       .should('not.be.disabled')
@@ -65,7 +61,6 @@ describe('WalkForm, StatsForm, Combined', () => {
       })
       .should('have.length', 3);
 
-    // InfoCard updates per choice
     cy.get('[data-cy="dropdown"]').select('avg').should('have.value', 'avg');
     cy.get('[data-cy="infocard"]').should('contain.text', 'Går i snitt');
     cy.get('[data-cy="dropdown"]')
@@ -80,7 +75,6 @@ describe('WalkForm, StatsForm, Combined', () => {
       .should('have.value', 'yearly');
     cy.get('[data-cy="infocard"]').should('contain.text', 'Totalt i år:');
 
-    // Delete first user and assert removed
     cy.get('@items')
       .its('length')
       .then((initialCount: number) => {
@@ -116,10 +110,8 @@ describe('WalkForm, StatsForm, Combined', () => {
 
     cy.get('[data-cy="save-button"]').should('not.be.disabled').click();
 
-    // Proof of DB persistence + StatsForm refresh via 'walks-updated'
     cy.get('[data-cy="user-list"]').should('contain.text', uniqueName);
 
-    // Fields should be reset after save
     cy.get('[data-cy="date-input"]').should('have.value', '');
     cy.get('[data-cy="walk-amount-input"]').should('have.value', '');
     cy.get('[data-cy="user-input"]').should('have.value', '');
