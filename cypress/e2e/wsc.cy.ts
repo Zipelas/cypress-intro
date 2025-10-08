@@ -4,9 +4,24 @@ beforeEach(() => {
 });
 
 describe('WalkForm, StatsForm, Combined', () => {
-  it('should be able to visit, able to choose a date, month and year, able to enter a number in inputfield and be able to save to database', () => {
-    cy.get('[data-cy="date-input"]').type('2025-09-04');
-    cy.get('[data-cy="input"]').type('1500');
+  it('should be able to visit, able to choose a date, month and year, able to enter a number in inputfield, able to write a name in inputfield and be able to save to database', () => {
+    cy.get('[data-cy="date-input"]')
+      .type('2025-09-04')
+      .should('have.value', '2025-09-04');
+    cy.get('[data-cy="walk-amount-input"]')
+      .should('be.visible')
+      .clear()
+      .type('1500')
+      .should('have.value', '1500');
+    cy.get('[data-cy="walk-amount-input"]').clear().type('0').blur();
+    cy.get('[data-cy="input-error"]').should(
+      'contain.text',
+      'Must be greater than 0'
+    );
+    cy.get('[data-cy="user-input"]')
+      .clear()
+      .type('Andreas Fagerlund')
+      .should('have.value', 'Andreas Fagerlund');
     cy.get('[data-cy="save-button"]').as('saveButton').parent();
     cy.get('[data-cy="save-button"]')
       .should('exist')
