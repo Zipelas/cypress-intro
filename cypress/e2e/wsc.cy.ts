@@ -31,66 +31,60 @@ describe('WalkForm, StatsForm, Combined', () => {
   });
 
   it('should render names, support selecting, show stats, and allow deleting', () => {
-    // 1) Namn läggs in i UL/LI
-    cy.get('[data-cy="user-list"]').should('exist');
-    cy.get('[data-cy="user-list"] li')
+    cy.get('[data-cy="user-list"]')
+      .should('exist')
+      .find('li')
       .as('items')
       .should('have.length.greaterThan', 0);
-
-    // 2) Namn-knappar är inte disabled (de ska gå att klicka)
     cy.get('@items')
       .first()
       .within(() => {
         cy.get('[data-cy="user-select"]').should('not.be.disabled');
         cy.get('[data-cy="user-delete"]').should('exist');
       });
-
-    // Spara första användarens namn för senare jämförelse
-    cy.get('@items')
-      .first()
-      .find('[data-cy="user-select"]')
-      .invoke('text')
-      .as('firstUserText');
-
-    // 3) Dropdown disabled när inget namn är aktivt
     cy.get('[data-cy="dropdown"]').should('be.disabled');
-
-    // 4) Aktivera namn (klick på user-select)
     cy.get('[data-cy="user-select"]').first().click();
-
-    // 5) Dropdown blir enabled
-    cy.get('[data-cy="dropdown"]').should('not.be.disabled');
-
-    // 6) Välja alternativ i dropdown och kolla InfoCard
-    cy.get('[data-cy="dropdown"]').select('avg');
+    cy.get('[data-cy="dropdown"]')
+      .should('not.be.disabled')
+      .find('option')
+      .not('[value=""]')
+      .then(($opts) => {
+        const texts = $opts.get().map((o) => (o.textContent || '').trim());
+        expect(texts).to.deep.equal([
+          'Gått i snitt',
+          'Gått varje månad',
+          'Gått totalt per år',
+        ]);
+      })
+      .should('have.length', 3);
+    cy.get('[data-cy="dropdown"]').select('avg').should('have.value', 'avg');
     cy.get('[data-cy="infocard"]').should('contain.text', 'Går i snitt');
-
-    cy.get('[data-cy="dropdown"]').select('monthly');
+    cy.get('[data-cy="dropdown"]')
+      .select('monthly')
+      .should('have.value', 'monthly');
     cy.get('[data-cy="infocard"]').should(
       'contain.text',
       'Totalt denna månad:'
     );
-
-    cy.get('[data-cy="dropdown"]').select('yearly');
+    cy.get('[data-cy="dropdown"]')
+      .select('yearly')
+      .should('have.value', 'yearly');
     cy.get('[data-cy="infocard"]').should('contain.text', 'Totalt i år:');
-
-    // 7) Klicka delete (röd kyss) och att namnet försvinner
-    cy.get('@items').then(($lis) => {
-      const initialCount = $lis.length;
-      cy.get('[data-cy="user-select"]')
-        .first()
-        .invoke('text')
-        .then((toDelete: string) => {
-          cy.get('[data-cy="user-delete"]').first().click();
-          cy.get('[data-cy="user-list"] li').should(
-            'have.length',
-            initialCount - 1
-          );
-          cy.get('[data-cy="user-list"]').should(
-            'not.contain.text',
-            toDelete.trim()
-          );
-        });
-    });
+    cy.get('@items')
+      .its('length')
+      .then((initialCount: number) => {
+        cy.get('[data-cy="user-select"]')
+          .first()
+          .invoke('text')
+          .then((name: string) => {
+            const trimmed = name.trim();
+            cy.get('[data-cy="user-delete"]').first().click();
+            cy.get('[data-cy="user-list"] li').should(
+              'have.length',
+              initialCount - 1
+            );
+            cy.get('[data-cy="user-list"]').should('not.contain.text', trimmed);
+          });
+      });
   });
 });
