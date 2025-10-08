@@ -22,7 +22,6 @@ describe('WalkForm, StatsForm, Combined', () => {
       .clear()
       .type('Andreas Fagerlund')
       .should('have.value', 'Andreas Fagerlund');
-    cy.get('[data-cy="save-button"]').as('saveButton').parent();
     cy.get('[data-cy="save-button"]')
       .should('exist')
       .and('have.prop', 'tagName')
@@ -31,47 +30,67 @@ describe('WalkForm, StatsForm, Combined', () => {
     cy.get('[data-cy="save-button"]').should('be.disabled');
   });
 
-  it('should be able to see names in user-list able to delete user should show 3 options able to choose one of them and see statistics in infocard', () => {
-    cy.get('[data-cy="user-delete"]').should('exist');
-    cy.get('[data-cy="user-list"] li').then(($users) => {
-      const initialCount = $users.length;
-      cy.get('[data-cy="user-delete"]').first().click();
-      cy.get('[data-cy="user-list"] li').should(
-        'have.length',
-        initialCount - 1
-      );
+  it('should render names, support selecting, show stats, and allow deleting', () => {
+    // 1) Namn läggs in i UL/LI
+    cy.get('[data-cy="user-list"]').should('exist');
+    cy.get('[data-cy="user-list"] li')
+      .as('items')
+      .should('have.length.greaterThan', 0);
+
+    // 2) Namn-knappar är inte disabled (de ska gå att klicka)
+    cy.get('@items')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="user-select"]').should('not.be.disabled');
+        cy.get('[data-cy="user-delete"]').should('exist');
+      });
+
+    // Spara första användarens namn för senare jämförelse
+    cy.get('@items')
+      .first()
+      .find('[data-cy="user-select"]')
+      .invoke('text')
+      .as('firstUserText');
+
+    // 3) Dropdown disabled när inget namn är aktivt
+    cy.get('[data-cy="dropdown"]').should('be.disabled');
+
+    // 4) Aktivera namn (klick på user-select)
+    cy.get('[data-cy="user-select"]').first().click();
+
+    // 5) Dropdown blir enabled
+    cy.get('[data-cy="dropdown"]').should('not.be.disabled');
+
+    // 6) Välja alternativ i dropdown och kolla InfoCard
+    cy.get('[data-cy="dropdown"]').select('avg');
+    cy.get('[data-cy="infocard"]').should('contain.text', 'Går i snitt');
+
+    cy.get('[data-cy="dropdown"]').select('monthly');
+    cy.get('[data-cy="infocard"]').should(
+      'contain.text',
+      'Totalt denna månad:'
+    );
+
+    cy.get('[data-cy="dropdown"]').select('yearly');
+    cy.get('[data-cy="infocard"]').should('contain.text', 'Totalt i år:');
+
+    // 7) Klicka delete (röd kyss) och att namnet försvinner
+    cy.get('@items').then(($lis) => {
+      const initialCount = $lis.length;
+      cy.get('[data-cy="user-select"]')
+        .first()
+        .invoke('text')
+        .then((toDelete: string) => {
+          cy.get('[data-cy="user-delete"]').first().click();
+          cy.get('[data-cy="user-list"] li').should(
+            'have.length',
+            initialCount - 1
+          );
+          cy.get('[data-cy="user-list"]').should(
+            'not.contain.text',
+            toDelete.trim()
+          );
+        });
     });
-    // cy.get('[data-cy="dropdown"]').select('Gått i snitt');
-    // cy.get('[data-cy="dropdown"]').should('contain.text', 'Gått i snitt');
-    // cy.get('[data-cy="dropdown"] option')
-    //   .not('[value=""]')
-    //   .then(($opts) => {
-    //     const texts = [...$opts].map((o) => o.textContent!.trim());
-    //     expect(texts).to.deep.equal([
-    //       'Gått i snitt',
-    //       'Gått varje månad',
-    //       'Gått totalt per år',
-    //     ]);
-    //   });
-    // cy.clock(new Date('2025-09-15T12:00:00Z').getTime());
-    // cy.visit('/', {
-    //   onBeforeLoad(win) {
-    //     const walks = [
-    //       { date: '2025-09-01', amount: 100 },
-    //       { date: '2025-09-10', amount: 200 },
-    //     ];
-    //     win.localStorage.setItem('walks', JSON.stringify(walks));
-    //   },
-    // });
-    // cy.get('[data-cy="dropdown"]').select('monthly');
-    // cy.get('[data-cy="infocard"]').should(
-    //   'contain.text',
-    //   'Totalt denna månad: 300'
-    // );
-    // cy.get('[data-cy="dropdown"]').select('avg');
-    // cy.get('[data-cy="infocard"]').should(
-    //   'contain.text',
-    //   'Går i snitt 150.0 per tillfälle (2 loggar).'
-    // );
   });
 });
