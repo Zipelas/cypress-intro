@@ -4,7 +4,7 @@ beforeEach(() => {
 });
 
 describe('WalkForm, StatsForm, Combined', () => {
-  it('should be able to visit, able to choose a date, month and year, able to enter a number in inputfield, able to write a name in inputfield and be able to save to database', () => {
+  it('validates amount=0 error and keeps Save disabled', () => {
     cy.get('[data-cy="date-input"]')
       .type('2025-09-04')
       .should('have.value', '2025-09-04');
@@ -30,19 +30,26 @@ describe('WalkForm, StatsForm, Combined', () => {
     cy.get('[data-cy="save-button"]').should('be.disabled');
   });
 
-  it('should render names, support selecting, show stats, and allow deleting', () => {
+  it('renders user list, shows stats via dropdown, and deletes a user', () => {
+    // List exists and has items
     cy.get('[data-cy="user-list"]')
       .should('exist')
       .find('li')
       .as('items')
       .should('have.length.greaterThan', 0);
+
+    // Buttons usable on first item
     cy.get('@items')
       .first()
       .within(() => {
         cy.get('[data-cy="user-select"]').should('not.be.disabled');
         cy.get('[data-cy="user-delete"]').should('exist');
       });
+
+    // Dropdown disabled before selection
     cy.get('[data-cy="dropdown"]').should('be.disabled');
+
+    // Select first user -> dropdown enabled
     cy.get('[data-cy="user-select"]').first().click();
     cy.get('[data-cy="dropdown"]')
       .should('not.be.disabled')
@@ -57,6 +64,8 @@ describe('WalkForm, StatsForm, Combined', () => {
         ]);
       })
       .should('have.length', 3);
+
+    // InfoCard updates per choice
     cy.get('[data-cy="dropdown"]').select('avg').should('have.value', 'avg');
     cy.get('[data-cy="infocard"]').should('contain.text', 'Går i snitt');
     cy.get('[data-cy="dropdown"]')
@@ -70,6 +79,8 @@ describe('WalkForm, StatsForm, Combined', () => {
       .select('yearly')
       .should('have.value', 'yearly');
     cy.get('[data-cy="infocard"]').should('contain.text', 'Totalt i år:');
+
+    // Delete first user and assert removed
     cy.get('@items')
       .its('length')
       .then((initialCount: number) => {
@@ -86,5 +97,32 @@ describe('WalkForm, StatsForm, Combined', () => {
             cy.get('[data-cy="user-list"]').should('not.contain.text', trimmed);
           });
       });
+  });
+
+  it('saves a new walk, updates stats, and resets the form (WalkForm→StatsForm)', () => {
+    const uniqueName = `Cypress User ${Date.now()}`;
+
+    cy.get('[data-cy="date-input"]')
+      .type('2025-09-04')
+      .should('have.value', '2025-09-04');
+    cy.get('[data-cy="walk-amount-input"]')
+      .clear()
+      .type('123')
+      .should('have.value', '123');
+    cy.get('[data-cy="user-input"]')
+      .clear()
+      .type(uniqueName)
+      .should('have.value', uniqueName);
+
+    cy.get('[data-cy="save-button"]').should('not.be.disabled').click();
+
+    // Proof of DB persistence + StatsForm refresh via 'walks-updated'
+    cy.get('[data-cy="user-list"]').should('contain.text', uniqueName);
+
+    // Fields should be reset after save
+    cy.get('[data-cy="date-input"]').should('have.value', '');
+    cy.get('[data-cy="walk-amount-input"]').should('have.value', '');
+    cy.get('[data-cy="user-input"]').should('have.value', '');
+    cy.get('[data-cy="save-button"]').should('be.disabled');
   });
 });
