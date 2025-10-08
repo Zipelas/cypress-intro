@@ -16,7 +16,6 @@ export default function DatePicker({
   return (
     <div
       className='flex justify-center my-4'
-      data-cy='datepicker'
       data-selected={hasDate ? 'true' : 'false'}
       data-selected-date={selectedDate || ''}>
       <label
