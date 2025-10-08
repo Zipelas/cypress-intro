@@ -28,7 +28,7 @@ describe('WalkForm, StatsForm, Combined', () => {
       .and('have.prop', 'tagName')
       .should('eq', 'BUTTON');
 
-    // cy.get('[data-cy="save-button"]').should('have.attr', 'disabled');
+    cy.get('[data-cy="save-button"]').should('be.disabled');
   });
 
   it('should be able to see names in user-list able to delete user should show 3 options able to choose one of them and see statistics in infocard', () => {
