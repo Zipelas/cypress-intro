@@ -2,7 +2,7 @@
 
 ## Beskrivning
 
-Det här projektet är byggt med Next.JS, Cypress, MongoDB, Prisma och Tailwind. Jag har skapat komponenter där du kan välja datum, fylla i ett input-fält, en dropdown, en kort där statistik visas och knappar.
+Det här projektet är byggt med Next.JS, Cypress, MongoDB, Prisma, Tailwind, Zod. Jag har skapat komponenter där du kan välja datum, fylla i hur många steg man har gått, fylla i ett namnt, <ul> där namn visas och tas bort, en dropdown, ett infocard där statistik visas.
 
 Jag skrev ett par användarflöden om användarna Tom & Jerry:
 
