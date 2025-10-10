@@ -11,8 +11,18 @@ describe('WalkForm, StatsForm, Combined', () => {
     cy.get('[data-cy="walk-amount-input"]')
       .should('be.visible')
       .clear()
+      .type('tusen')
+      .blur();
+    cy.get('[data-cy="input-error"]').should(
+      'contain.text',
+      'Please enter a whole number'
+    );
+    cy.get('[data-cy="save-button"]').should('be.disabled');
+    cy.get('[data-cy="walk-amount-input"]')
+      .clear()
       .type('1500')
       .should('have.value', '1500');
+    cy.get('[data-cy="input-error"]').should('not.exist');
     cy.get('[data-cy="walk-amount-input"]').clear().type('0').blur();
     cy.get('[data-cy="input-error"]').should(
       'contain.text',
