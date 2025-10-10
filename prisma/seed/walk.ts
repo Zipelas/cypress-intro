@@ -21,6 +21,12 @@ export async function seedWalks() {
       amount: 3000,
       text: '{"test": "data"}',
     },
+    {
+      id: '68adb30b0c2c50f13d0a64ec',
+      date: new Date('2023-02-01'),
+      amount: 4000,
+      text: '{"test": "data"}',
+    },
   ];
 
   for (const { id, ...walk } of mockedWalks) {
