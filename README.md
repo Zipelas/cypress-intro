@@ -24,3 +24,11 @@ Kör `npm run dev` för att starta utvecklingsservern.
 ## Testning
 
 Kör `npm test` för att köra testerna.
+
+## Bygg produktion
+
+Kör `npm run build` 
+
+## Starta produktion
+
+Kör `npm run start` 
