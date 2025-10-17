@@ -41,6 +41,9 @@ describe('WalkForm, StatsForm, Combined', () => {
   });
 
   it('renders user list, shows stats via dropdown, and deletes a user', () => {
+    cy.clock(new Date('2025-01-15T12:00:00Z').getTime());
+    cy.reload();
+
     cy.get('[data-cy="user-list"]')
       .should('exist')
       .find('li')

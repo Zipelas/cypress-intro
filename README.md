@@ -12,7 +12,11 @@ Tom går in på sidan. Han väljer vilket datum han vill använda. Sen fyller ha
 Återgångsanvändare
 Jerry gör samma sak som Tom + plus att han går in klickar på knappen statistik. Där kan han välja på olika statistik (Gått i snitt, Gått varje månad och Gått totalt per år) som han vill se. Sen så stänger han ner sidan.
 
-E2E‑tester körs mot en separat in-memory MongoDB. Databasen återställs via cy.task('reseed').
+## Testdatabas
+E2E‑tester körs mot en separat in‑memory MongoDB och reseedas via cy.task('reseed').
+
+## Tidsmockning (cy.clock)
+Tiden mockas i statistiktestet (cy.clock) för förutsägbara “denna månad”/“i år”-beräkningar.
 
 ## Installation
 
@@ -36,4 +40,4 @@ Kör `npm run build` skapar .next/ artefakter
 
 ## Starta produktion
 
-Kör `npm run start` 
+Kör `npm run start`
